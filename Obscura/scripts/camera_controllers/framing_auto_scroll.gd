@@ -15,6 +15,7 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if !current:
 		return
+
 	# Draw the frame boundary if draw_camera_logic is enabled
 	if draw_camera_logic:
 		draw_logic()

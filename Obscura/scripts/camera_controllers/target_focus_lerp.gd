@@ -1,12 +1,15 @@
-class_name LerpSmoothingCamera
+class_name TargetFocusLerp
 extends CameraControllerBase
 
-@export var follow_speed: float = 30.0  # Speed to follow the player while moving
-@export var catchup_speed: float = 20.0  # Speed to catch up when the player stops
+@export var base_lead_speed: float = 70.0  # Base lead speed
+@export var boost_lead_speed: float = 200.0  # Lead speed during boost mode
+@export var catchup_speed: float = 40  # Speed to catch up when the player stops
 @export var leash_distance: float = 20  # Maximum allowed distance between camera and player
 @export var radius: float = 5  # For drawing the cross
 
 @onready var vessel: Vessel = %Vessel
+var time_since_stop: float = 0.0  # Tracks the time since the player stopped moving
+var is_moving: bool = false  # Tracks whether the player is currently moving
 
 func _ready() -> void:
 	super()
@@ -25,23 +28,36 @@ func _process(delta: float) -> void:
 	var offset = target.global_position - transform.origin
 	var distance = offset.length()
 
-	# Determine if the vessel is moving or stationary
-	var is_moving = vessel.velocity.length() > 0.1  # Adjust threshold if needed
+	# Determine if the vessel is moving and get the input direction
+	var input_dir = Vector2(
+		Input.get_action_strength("ui_right") - Input.get_action_strength("ui_left"),
+		Input.get_action_strength("ui_down") - Input.get_action_strength("ui_up")
+	).normalized()
 
-	# Use follow speed if the vessel is moving, otherwise use catchup speed
-	var speed = follow_speed if is_moving else catchup_speed
+	is_moving = input_dir != Vector2.ZERO  # Check if the vessel is moving
 
-	# Calculate lerp factor based on distance and leash_distance
-	var lerp_factor = speed * delta / distance
+	# Check if the vessel is in boost mode (speed = 300)
+	var is_boosting = vessel.velocity.length() >= 300
 
-	# Ensure the camera does not exceed leash_distance
-	if distance > leash_distance:
-		lerp_factor = 600 * delta / distance
-		# Catch up to the vessel when beyond leash distance
-		transform.origin = transform.origin.lerp(target.global_position, min(lerp_factor, 1.0))
+	# Adjust lead speed based on boost mode
+	var current_lead_speed = boost_lead_speed if is_boosting else base_lead_speed
+
+	if is_moving:
+		
+		# Lead the camera in the direction of player input with adjusted lead speed
+		var lead_offset = Vector3(input_dir.x, 0, input_dir.y).normalized() * leash_distance
+		var target_position = target.global_position + lead_offset
+		var lerp_factor = current_lead_speed * delta / distance
+		transform.origin = transform.origin.lerp(target_position, min(lerp_factor, 1.0))
+
 	else:
-		# Smoothly follow the vessel within leash distance
-		transform.origin = transform.origin.lerp(target.global_position, 0.05)
+		
+		var lerp_factor = catchup_speed * delta / distance
+		transform.origin = transform.origin.lerp(target.global_position, min(lerp_factor, 1.0))
+
+	# Ensure camera never falls too far behind the vessel in boost mode
+	if distance > leash_distance and is_boosting:
+		transform.origin = transform.origin.lerp(target.global_position, min(1.0, current_lead_speed * delta / distance))
 
 	super(delta)
 

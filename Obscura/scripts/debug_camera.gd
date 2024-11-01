@@ -8,6 +8,7 @@ func _ready():
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(_delta):
+	#print ("target focus lerp")
 	text = str(round((get_parent() as Node3D).global_position))
 	text += "\n"
 	text += str(round((%Vessel as Vessel).global_position))
