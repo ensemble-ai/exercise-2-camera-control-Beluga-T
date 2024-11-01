@@ -110,7 +110,7 @@ script = ExtResource("3_4fllx")
 [node name="FourwayDoubleBox" parent="." node_paths=PackedStringArray("target") instance=ExtResource("3_ttnp6")]
 transform = Transform3D(1, 0, 0, 0, 1.19249e-08, 1, 0, -1, 1.19249e-08, 0, 30, 0)
 script = ExtResource("9_tuyqe")
-push_ratio = 1.8
+push_ratio = 2.0
 pushbox_top_left = Vector2(-15, 15)
 pushbox_bottom_right = Vector2(15, -15)
 speedup_zone_top_left = Vector2(-5, 5)

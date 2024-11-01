@@ -1,7 +1,7 @@
 class_name FourWayDoubleBox
 extends CameraControllerBase
 
-@export var push_ratio: float = 1.8  # The ratio that the camera should move toward the target when not at the edge of the outer pushbox
+@export var push_ratio: float = 2.0 # The ratio that the camera should move toward the target when not at the edge of the outer pushbox
 @export var pushbox_top_left: Vector2 = Vector2(-15, 15)  # Top-left corner of the outer push zone
 @export var pushbox_bottom_right: Vector2 = Vector2(15, -15)  # Bottom-right corner of the outer push zone
 @export var speedup_zone_top_left: Vector2 = Vector2(-5, 5)  # Top-left corner of the inner speedup zone
