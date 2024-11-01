@@ -20,7 +20,7 @@ func _process(delta: float) -> void:
 	if !current:
 		return
 
-	# Draw cross if draw_camera_logic is enabled
+	
 	if draw_camera_logic:
 		draw_logic()
 
@@ -73,13 +73,13 @@ func draw_logic() -> void:
 	mesh_instance.mesh = immediate_mesh
 	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
-	# Define cross dimensions (5x5 units) based on the radius on the XZ plane
+	
 	var left: float = -radius
 	var right: float = radius
 	var top: float = -radius
 	var bottom: float = radius
 
-	# Begin drawing the cross on the XZ plane
+	
 	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
 	
 	# Vertical line

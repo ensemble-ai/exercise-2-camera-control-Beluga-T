@@ -25,7 +25,7 @@ func _process(delta: float) -> void:
 	var offset = target.global_position - transform.origin
 	var distance = offset.length()
 
-	# Determine if the vessel is moving or stationary
+
 	var is_moving = vessel.velocity.length() > 0.1  # Adjust threshold if needed
 
 	# Use follow speed if the vessel is moving, otherwise use catchup speed
@@ -34,7 +34,7 @@ func _process(delta: float) -> void:
 	# Calculate lerp factor based on distance and leash_distance
 	var lerp_factor = speed * delta / distance
 
-	# Ensure the camera does not exceed leash_distance
+	
 	if distance > leash_distance:
 		lerp_factor = 600 * delta / distance
 		# Catch up to the vessel when beyond leash distance
@@ -57,13 +57,13 @@ func draw_logic() -> void:
 	mesh_instance.mesh = immediate_mesh
 	mesh_instance.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 
-	# Define cross dimensions (5x5 units) based on the radius on the XZ plane
+	
 	var left: float = -radius
 	var right: float = radius
 	var top: float = -radius
 	var bottom: float = radius
 
-	# Begin drawing the cross on the XZ plane
+	
 	immediate_mesh.surface_begin(Mesh.PRIMITIVE_LINES, material)
 	
 	# Vertical line
@@ -76,7 +76,7 @@ func draw_logic() -> void:
 
 	immediate_mesh.surface_end()
 
-	# Set the cross position and add mesh to the scene, freeing it after one frame
+	
 	add_child(mesh_instance)
 	mesh_instance.global_transform = Transform3D.IDENTITY
 	mesh_instance.global_position = Vector3(transform.origin.x, target.global_position.y, transform.origin.z)

@@ -79,10 +79,8 @@ func _process(delta: float) -> void:
 		elif tpos.z <= outer_bottom:
 			move_z = tpos.z - outer_bottom
 
-		# Apply the movement
 		global_position += Vector3(move_x, 0, move_z)
 
-	# Draw push zone boundaries if enabled
 	if draw_camera_logic:
 		draw_logic()
 		
